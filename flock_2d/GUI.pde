@@ -68,28 +68,28 @@ public class ControlFrame extends PApplet {
       .updateSize()
     ;
 
-    cp5.addSlider("hg")
-      .plugTo(parent,"hg")
-      .setRange(0,1)
+    cp5.addSlider("h")
+      .plugTo(parent,"h")
+      .setRange(0.0,1.0)
       .setValue(0.25)
       .setPosition(20,100)
       .setSize(120,20)
       .updateSize()
     ;
 
-    cp5.addSlider("ht")
-      .plugTo(parent,"ht")
-      .setRange(0,1)
-      .setValue(0.25)
-      .setPosition(20,65)
-      .setSize(120,20)
-      .updateSize()
-    ;
+    // cp5.addSlider("ht")
+    //   .plugTo(parent,"ht")
+    //   .setRange(0,1)
+    //   .setValue(0.25)
+    //   .setPosition(20,65)
+    //   .setSize(120,20)
+    //   .updateSize()
+    // ;
 
-    cp5.addSlider("pt")
-      .plugTo(parent,"pt")
-      .setRange(0,1)
-      .setValue(0.50)
+    cp5.addSlider("w")
+      .plugTo(parent,"w")
+      .setRange(0.0,1.0)
+      .setValue(0.5)
       .setPosition(180,65)
       .setSize(120,20)
       .updateSize()

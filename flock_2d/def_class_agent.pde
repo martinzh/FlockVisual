@@ -115,7 +115,7 @@ class Agent2D
 
             float phi = PI;
 
-            float ang = pt * ( PVector.angleBetween(vel,prom) + ht*random(-phi, phi)) ;
+            float ang = w * ( PVector.angleBetween(vel,prom) + h *random(-phi, phi)) ;
             // println("ang: "+ang);
             // println(vel);
             vel.rotate(ang);
@@ -146,7 +146,7 @@ class Agent2D
 
             float phi = PI;
 
-            float ang = pg * ( PVector.angleBetween(vel,prom) + hg*random(-phi, phi)) ;
+            float ang = (1-w) * ( PVector.angleBetween(vel,prom) + h * random(-phi, phi)) ;
             // println("ang: "+ang);
             // println(vel);
             vel.rotate(ang);
@@ -200,7 +200,8 @@ class Agent2D
 
 
             // ang_top =  PVector.angleBetween(vel,prom_topo) + ht*random(-phi, phi) ;
-            ang_top =  calc_ang(vel,prom_topo) + ht*random(-phi, phi) ;
+            // ang_top =  calc_ang(vel,prom_topo) + ht*random(-phi, phi) ;
+            ang_top =  calc_ang(vel,prom_topo) ;
             // println(vel);
             // vel.rotate(ang);
         } 
@@ -208,12 +209,13 @@ class Agent2D
         // if (vel.magSq() != 0 && prom_geom.magSq() != 0 && n_g != 0) {
         if (vel.magSq() != 0 && prom_geom.magSq() != 0 ) {
             // ang_geom = PVector.angleBetween(vel,prom_geom) + hg*random(-phi, phi) ;
-            ang_geom = calc_ang(vel,prom_geom) + hg*random(-phi, phi) ;
+            // ang_geom = calc_ang(vel,prom_geom) + hg*random(-phi, phi) ;
+            ang_geom = calc_ang(vel,prom_geom) ;
             // println(vel);
             // vel.rotate(ang);
         } 
 
-        float ang = pt * ang_top + pg * ang_geom;
+        float ang = w * ang_top + (1-w) * ang_geom + h*random(-phi,phi);
 
         // println("ang_top: "+ ang_top + "\tang_geom: "+ ang_geom + "\tang: "+ ang);
 

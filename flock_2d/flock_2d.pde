@@ -22,8 +22,8 @@ ControlFrame cf;
 Agent2D pred;
 Flock flock;
 
-float l = 25, vo = 1, hg, ht, r, dt, pt, pg ;
-int k = 5, n = 100, go, topo, geom, bac;
+float l = 50, vo = 1, h, r, dt, w ;
+int k = 2, n = 350, go, topo, geom, bac;
 float s = 1;
 
 void setup() {
@@ -38,8 +38,8 @@ void setup() {
 	cf = addControlFrame("parameters", 600,200);
 
 	pred = new Agent2D(l,vo,0,r);
-	// flock = new Flock(n,l,vo,k,r);
-	flock = new Flock(n,l,vo,r);
+	flock = new Flock(n,l,vo,k,r);
+	// flock = new Flock(n,l,vo,r);
 }
 
 void draw() {
@@ -57,7 +57,7 @@ void draw() {
 	// stroke(255);
 	// // ellipse(0, 0, 100, 100);
 
-	pg = abs(1-pt);
+	// pg = abs(1-pt);
 
 	// println("pt: "+ pt + "\t pg: " + pg);
 
@@ -126,7 +126,7 @@ float calc_ang(PVector v1, PVector v2){
 
 void pred_update(int p){
 	pred.Show_Pred();
-	pred.Show_Pred();
+	// pred.Show_Pred();
 	// if (p ==1) pred.Move(dt);
 	pred.pos.x = mouseX - width/2;
 	pred.pos.y = mouseY - height/2;
