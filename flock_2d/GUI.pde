@@ -34,6 +34,22 @@ public class ControlFrame extends PApplet {
       .setSize(30,30)
       .updateSize()
     ;
+    
+    cp5.addToggle("fluct")
+      .plugTo(parent,"fluct")
+      .setValue(0)
+      .setPosition(20,60)
+      .setSize(30,30)
+      .updateSize()
+    ;
+    
+    cp5.addToggle("full")
+      .plugTo(parent,"full")
+      .setValue(1)
+      .setPosition(65,60)
+      .setSize(30,30)
+      .updateSize()
+    ;
 
     cp5.addButton("reset")
       .plugTo(parent,"reset")
@@ -61,33 +77,24 @@ public class ControlFrame extends PApplet {
     
     cp5.addSlider("dt")
       .plugTo(parent,"dt")
-      .setRange(1,10)
-      .setValue(1.0)
+      .setRange(0.25,2.5)
+      .setValue(0.5)
       .setPosition(70,10)
       .setSize(120,20)
       .updateSize()
     ;
 
-    cp5.addSlider("h")
-      .plugTo(parent,"h")
+    cp5.addSlider("eta")
+      .plugTo(parent,"eta")
       .setRange(0.0,1.0)
       .setValue(0.25)
-      .setPosition(20,100)
+      .setPosition(20,110)
       .setSize(120,20)
       .updateSize()
     ;
 
-    // cp5.addSlider("ht")
-    //   .plugTo(parent,"ht")
-    //   .setRange(0,1)
-    //   .setValue(0.25)
-    //   .setPosition(20,65)
-    //   .setSize(120,20)
-    //   .updateSize()
-    // ;
-
-    cp5.addSlider("w")
-      .plugTo(parent,"w")
+    cp5.addSlider("omega")
+      .plugTo(parent,"omega")
       .setRange(0.0,1.0)
       .setValue(0.5)
       .setPosition(180,65)

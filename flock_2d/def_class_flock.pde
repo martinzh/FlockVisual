@@ -6,8 +6,13 @@ class Flock
 {
     // elements --> arreglo con los agentes
     // N --> numero de miembros
+    float arr = 5.0;
     
     Agent2D[] elements;
+    PVector posCM;
+    PVector velCM;
+
+/// ====================================== /// ====================================== ///
 
     Flock(int n, float l, float v, int k, float r)
     {
@@ -21,7 +26,13 @@ class Flock
                 elements[i].links[j] = int(random(n));
             }
         }
+
+        posCM = new PVector();
+        velCM = new PVector();
     }
+
+/// ====================================== /// ====================================== ///
+
 
     Flock(int n, float l, float v, float r)  // numero de links de poisson
     {
@@ -37,8 +48,46 @@ class Flock
         }
     }
 
+/// ====================================== /// ====================================== ///
+
+    void calcCM(){
+
+        posCM.x = 0;
+        posCM.y = 0;
+        
+        velCM.x = 0;
+        velCM.y = 0;
+
+        for(Agent2D agent : elements){
+            posCM.add(agent.pos);
+            velCM.add(agent.vel);
+        }
+
+        posCM.div(float(flock.elements.length));
+        velCM.div(float(flock.elements.length));
+
+    }
+
+/// ====================================== /// ====================================== ///
+
+    void showCM(){
+
+        float mult = 3.0;
+
+        stroke(255,0,0);
+        strokeWeight(2);
+
+        // arrow(posCM.x, posCM.y, posCM.x + arr * velCM.x, posCM.y + arr * velCM.y);
+        arrow(0, 0, mult*arr * velCM.x, mult*arr * velCM.y);
+
+    }
+
+/// ====================================== /// ====================================== ///
+
     // void Update(double dt, double pg, double pt){
     void Update(float dt, int p, Agent2D pred){
+
+        calcCM();
 
         for(Agent2D agent : elements){
 
@@ -55,7 +104,11 @@ class Flock
         }
     }
 
+/// ====================================== /// ====================================== ///
+
     void Update(float dt, int p){
+
+        calcCM();
 
         for(Agent2D agent : elements){
 
@@ -70,6 +123,29 @@ class Flock
             }
         }
     }
+
+/// ====================================== /// ====================================== ///
+
+    void Update(float dt, int p, PVector posCM){
+
+        showCM();
+
+        for(Agent2D agent : elements){
+
+            // agent.Show();
+            // agent.ShowPoint(posCM);
+
+            if (p ==1){
+                // agent.AlignTopo(elements);
+                // agent.AlignGeom(elements);
+                agent.AlignBoth(elements);
+                agent.Move(dt);
+            }
+        }
+    }
+
+
+/// ====================================== /// ====================================== ///
 
     void Cluster(){
 
@@ -94,6 +170,8 @@ class Flock
         }
     }
 
+/// ====================================== /// ====================================== ///
+
     IntList GetGeomNeigh(Agent2D part){
 
         IntList neigh = new IntList();
@@ -109,6 +187,8 @@ class Flock
         return neigh;
     }
 
+/// ====================================== /// ====================================== ///
+
     void ChangeID(IntList neigh, Agent2D part, int nb){
 
         part.id = nb;
@@ -117,5 +197,7 @@ class Flock
             elements[i].id = part.id;
         }
     }
+
+/// ====================================== /// ====================================== ///
 
 };
