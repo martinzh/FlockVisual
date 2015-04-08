@@ -75,19 +75,19 @@ public class ControlFrame extends PApplet {
       .updateSize()
     ;
     
-    cp5.addSlider("dt")
-      .plugTo(parent,"dt")
-      .setRange(0.25,2.5)
-      .setValue(0.5)
-      .setPosition(70,10)
-      .setSize(120,20)
-      .updateSize()
-    ;
+    // cp5.addSlider("dt")
+    //   .plugTo(parent,"dt")
+    //   .setRange(0.25,2.5)
+    //   .setValue(0.5)
+    //   .setPosition(70,10)
+    //   .setSize(120,20)
+    //   .updateSize()
+    // ;
 
     cp5.addSlider("eta")
       .plugTo(parent,"eta")
-      .setRange(0.0,1.0)
-      .setValue(0.25)
+      .setRange(0.0,0.6)
+      .setValue(0.05)
       .setPosition(20,110)
       .setSize(120,20)
       .updateSize()
@@ -96,20 +96,20 @@ public class ControlFrame extends PApplet {
     cp5.addSlider("omega")
       .plugTo(parent,"omega")
       .setRange(0.0,1.0)
-      .setValue(0.5)
+      .setValue(0.05)
       .setPosition(180,65)
       .setSize(120,20)
       .updateSize()
     ;
 
-    cp5.addSlider("radio")
-      .plugTo(parent,"radio")
-      .setRange(1,30)
-      .setValue(5.0)
-      .setPosition(180,100)
-      .setSize(120,20)
-      .updateSize()
-    ;
+    // cp5.addSlider("radio")
+    //   .plugTo(parent,"radio")
+    //   .setRange(1,30)
+    //   .setValue(5.0)
+    //   .setPosition(180,100)
+    //   .setSize(120,20)
+    //   .updateSize()
+    // ;
 
     cp5.addSlider("scale")
       .plugTo(parent,"s")

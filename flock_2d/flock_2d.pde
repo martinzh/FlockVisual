@@ -29,9 +29,16 @@ ControlFrame cf;
 // Agent2D pred;
 Flock flock;
 
-float l = 100, vo = 1, eta, r, dt, omega ;
-int k = 2, n = 1000, go, topo, geom, bac, fluct, full;
+float l = 0.1; // regimen de velocidad
+float vo = 1.0;
+float eta; // magnitud de ruido
+float r; // radio de interaccion local
+float dt = 1.0;
+float omega; // peso relativo entre vecindades 
+int k = 2, n, go, topo, geom, bac, fluct, full;
 float s = 1;
+float p = 10; // densidad 
+float tam = 10; // region cuadrada inicial
 
 /// ====================================== /// ====================================== ///
 
@@ -46,9 +53,12 @@ void setup() {
 	cp5 = new ControlP5(this);
 	cf = addControlFrame("parameters", 600,200);
 
+	r = vo * dt / l;
+
+	n = (int)(r*r*p);
 	// pred = new Agent2D(l,vo,0,r);
 
-	flock = new Flock(n,l,vo,k,r);
+	flock = new Flock(n,tam*r,vo,k,r);
 	// flock = new Flock(n,l,vo,r);
 }
 
@@ -67,7 +77,6 @@ void draw() {
 	translate(width/2, height/2);
 
 	scale(s);
-
 
 	flock.calcCM();
 	flock.Update(dt,go, flock.posCM);

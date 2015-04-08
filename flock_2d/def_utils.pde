@@ -80,6 +80,9 @@ void radio(float rr){
 /// ====================================== /// ====================================== ///
 
 void reset(){
+
+  float l = tam*r;
+
   for(Agent2D o : flock.elements){
     o.pos.set(random(-l, l), random(-l, l));
     o.vel = PVector.random2D();
