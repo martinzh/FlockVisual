@@ -95,11 +95,27 @@ class Agent2D
         arrow(x, y, x + arr*this.vel.x, y + arr*this.vel.y);
     }
 
+    void ShowPoint(PVector posCM, float col){
+
+        strokeWeight(1);
+        colorMode(HSB);
+        stroke(col,255,255);
+        // point(pos.x,pos.y);
+        float x = this.pos.x - posCM.x;
+        float y = this.pos.y - posCM.y;
+
+        // line( x , y , x + 3*this.vel.x , y + 3*this.vel.y);
+        arrow(x, y, x + 3*arr*this.vel.x, y + 3*arr*this.vel.y);
+        noFill();
+        ellipse(x, y, 10, 10);
+        colorMode(RGB);
+    }
+
 /// ====================================== /// ====================================== ///
 
     void ShowFluctVel(PVector posCM, PVector velCM){
 
-        float s = 0.09;
+        float s = 0.0;
 
         // point(pos.x,pos.y);
         float x = this.pos.x - posCM.x;
@@ -112,18 +128,55 @@ class Agent2D
 
         float ang = calc_ang(u,velCM);
 
+        // double ang = Math.acos(Math.toRadians(u.x * velCM.x + u.y * velCM.y));
+
         strokeWeight(0.5);
         colorMode(HSB);
 
         stroke(map(ang,PI,-PI,0,255),255,255);
         
+        // stroke(map((float)ang,0,PI,0,255),255,255);
+
         arrow(x, y, x + arr*(ux + s), y + arr*(uy + s) );
+
+        colorMode(RGB);
+
+    }
+
+    void ShowFluctVel(PVector posCM, PVector velCM, PVector vecPert, int col){
+
+        float s = 0.09;
+
+        // point(pos.x,pos.y);
+        float x = this.pos.x - posCM.x;
+        float y = this.pos.y - posCM.y;
+
+        float ux = this.vel.x - vecPert.x;
+        float uy = this.vel.y - vecPert.y;
+
+        PVector u = new PVector(ux,uy);
+
+        // PVector pVec = new PVector(vecPert.x - velCM.x, vecPert.y - velCM.y );
+
+        float ang = calc_ang(u,vecPert);
+
+        strokeWeight(0.5);
+        colorMode(HSB);
+
+        stroke(map(ang,-PI,PI,col,255),255,255);
+        arrow(x, y, x + arr*(ux + s), y + arr*(uy + s) );
+
+        colorMode(RGB);
+
     }
 
 /// ====================================== /// ====================================== ///
 
     void ShowTopoLinks(Agent2D[] elements){
+
         stroke(255,0,0);
+        strokeWeight(0.5);
+
         for (int x : links) {
             line(pos.x, pos.y, elements[x].pos.x , elements[x].pos.y);
             // println(x);
@@ -131,7 +184,9 @@ class Agent2D
     }
 
     void ShowTopoLinks(Agent2D[] elements, PVector posCM){
+
         stroke(255,0,0);
+        strokeWeight(0.5);
 
         for (int k : links) {
 
@@ -148,7 +203,10 @@ class Agent2D
 /// ====================================== /// ====================================== ///
 
     void ShowGeomLinks(Agent2D[] elements){
+        
         stroke(0,0,255);
+        strokeWeight(0.5);
+
         for (Agent2D o : elements) {
             if ( pos.dist(o.pos) <= r && pos.dist(o.pos) > 0 ) {
                 line(pos.x, pos.y, o.pos.x , o.pos.y);
@@ -157,7 +215,11 @@ class Agent2D
     }
 
     void ShowGeomLinks(Agent2D[] elements, PVector posCM){
-        stroke(0,0,255);
+
+        colorMode(HSB);
+        stroke(50,200,200,150);
+        strokeWeight(0.5);
+
         for (Agent2D o : elements) {
             if ( pos.dist(o.pos) <= r && pos.dist(o.pos) > 0 ) {
 

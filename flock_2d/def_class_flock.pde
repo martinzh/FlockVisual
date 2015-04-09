@@ -75,7 +75,7 @@ class Flock
         float mult = 3.0;
 
         stroke(255,0,0);
-        strokeWeight(2);
+        strokeWeight(1);
 
         // arrow(posCM.x, posCM.y, posCM.x + arr * velCM.x, posCM.y + arr * velCM.y);
         arrow(0, 0, mult*arr * velCM.x, mult*arr * velCM.y);
@@ -95,8 +95,6 @@ class Flock
             agent.ShowPoint();
 
             if (p ==1){
-                // agent.AlignTopo(elements);
-                // agent.AlignGeom(elements);
                 agent.AlignBoth(elements);
                 agent.Predator(pred, dt);
                 agent.Move(dt);
@@ -108,38 +106,47 @@ class Flock
 
     void Update(float dt, int p){
 
-        calcCM();
-
-        for(Agent2D agent : elements){
-
-            // agent.Show();
-            agent.ShowPoint();
-
-            if (p ==1){
-                // agent.AlignTopo(elements);
-                // agent.AlignGeom(elements);
-                agent.AlignBoth(elements);
-                agent.Move(dt);
-            }
-        }
-    }
-
-/// ====================================== /// ====================================== ///
-
-    void Update(float dt, int p, PVector posCM){
-
         showCM();
 
         for(Agent2D agent : elements){
 
             // agent.Show();
-            // agent.ShowPoint(posCM);
+            // agent.ShowPoint();
 
             if (p ==1){
-                // agent.AlignTopo(elements);
-                // agent.AlignGeom(elements);
                 agent.AlignBoth(elements);
                 agent.Move(dt);
+            }
+        }
+    }
+
+/// ====================================== /// ====================================== ///
+
+    void Update(float dt, int p, int pert){
+
+        showCM();
+
+        if (pert == 1) {
+
+            for (int i = 0; i < n; ++i) {
+                if (p ==1){
+                    if(i != 0) flock.elements[i].AlignBoth(elements);
+                    flock.elements[i].Move(dt);
+                }                
+            }
+            
+        }
+        else{
+
+            for(Agent2D agent : elements){
+
+                // agent.Show();
+                // agent.ShowPoint(posCM);
+
+                if (p ==1){
+                    agent.AlignBoth(elements);
+                    agent.Move(dt);
+                }
             }
         }
     }
@@ -147,30 +154,6 @@ class Flock
 
 /// ====================================== /// ====================================== ///
 
-    void Cluster(){
-
-        IntList neigh = new IntList();
-
-        IntList clust_size = new IntList();
-
-        int cluster = 0;
-
-        elements[0].id = 0;   
-        
-        for (int i = 0; i < elements.length; ++i) {
-            
-            neigh = GetGeomNeigh(elements[i]);
-            ChangeID(neigh,elements[i],cluster);
-
-            // while(neigh.size() > 0){
-
-                
-
-            // }
-        }
-    }
-
-/// ====================================== /// ====================================== ///
 
     IntList GetGeomNeigh(Agent2D part){
 
@@ -195,6 +178,30 @@ class Flock
 
         for (int i : neigh) {
             elements[i].id = part.id;
+        }
+    }
+
+/// ====================================== /// ====================================== ///
+
+    void Cluster(){
+
+        IntList neigh = new IntList();
+
+        IntList clust_size = new IntList();
+
+        int cluster = 0;
+
+        elements[0].id = 0;   
+        
+        for (int i = 0; i < elements.length; ++i) {
+            
+            neigh = GetGeomNeigh(elements[i]);
+            ChangeID(neigh,elements[i],cluster);
+
+            // while(neigh.size() > 0){
+
+
+            // }
         }
     }
 

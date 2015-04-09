@@ -57,13 +57,13 @@ void arrow(float x1, float y1, float x2, float y2) {
 
 /// ====================================== /// ====================================== ///
 
-void Example(int i){
+void ShowNetwork(int i){
   if(topo == 1) flock.elements[i].ShowTopoLinks(flock.elements);
   if(geom == 1) flock.elements[i].ShowGeomLinks(flock.elements);
   // flock.elements[i].ShowRadius();
 }
 
-void Example(int i, PVector posCM){
+void ShowNetwork(int i, PVector posCM){
   if(topo == 1) flock.elements[i].ShowTopoLinks(flock.elements, posCM);
   if(geom == 1) flock.elements[i].ShowGeomLinks(flock.elements, posCM);
   // flock.elements[i].ShowRadius();
@@ -110,6 +110,16 @@ float calc_ang(PVector v1, PVector v2){
 
   return a2-a1;
 }
+
+/// ====================================== /// ====================================== ///
+
+void applyPert(int pertFlag){
+  for (int i = 0; i < numPerts; ++i) {
+    flock.elements[i].vel.rotate(pertMag*PI);
+  }
+
+}
+
 
 /// ====================================== /// ====================================== ///
 
