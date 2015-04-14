@@ -33,12 +33,13 @@ Flock flock;
 
 float l = 0.1; // regimen de velocidad
 float vo = 1.0;
+// float eta; // magnitud de ruido
 float eta; // magnitud de ruido
 float r; // radio de interaccion local
 float dt = 1.0;
 float omega; // peso relativo entre vecindades 
 float pertMag;
-int k = 5, n, go, topo, geom, bac, fluct, full, pert, numPerts;
+int k = 1, n, go, topo, geom, bac, fluct, full, pert, numPerts;
 float s = 1;
 float p = 10; // densidad 
 float tam = 10; // region cuadrada inicial

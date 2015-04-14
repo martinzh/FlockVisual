@@ -116,6 +116,7 @@ float calc_ang(PVector v1, PVector v2){
 void applyPert(int pertFlag){
   for (int i = 0; i < numPerts; ++i) {
     flock.elements[i].vel.rotate(pertMag*PI);
+    // flock.elements[i].Move(dt);
   }
 
 }
