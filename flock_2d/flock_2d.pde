@@ -39,7 +39,7 @@ float r; // radio de interaccion local
 float dt = 1.0;
 float omega; // peso relativo entre vecindades 
 float pertMag;
-int k = 1, n, go, topo, geom, bac, fluct, full, pert, numPerts;
+int k = 1, n, go, topo, geom, bac, fluct, full, pert, numPerts, movePert;
 float s = 1;
 float p = 10; // densidad 
 float tam = 10; // region cuadrada inicial
@@ -55,7 +55,7 @@ void setup() {
 	background(80);
 
 	cp5 = new ControlP5(this);
-	cf = addControlFrame("parameters", 300, 250);
+	cf = addControlFrame("parameters", 300, 280);
 
 	r = vo * dt / l;
 	n = (int)(r*r*p);
