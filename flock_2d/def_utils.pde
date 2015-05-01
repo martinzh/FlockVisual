@@ -123,6 +123,27 @@ void applyPert(){
   }
 }
 
+/// ====================================== /// ====================================== ///
+
+void rampPert(){
+
+  float i = 0;
+
+  while (i < 0.5) {
+    flock.elements[0].vel.rotate(i*PI);
+    flock.elements[0].Move(dt);
+
+    i += 0.001;
+  }
+
+  // for (int i = 0; i < numPerts; ++i) {
+  //   if(movePert == 1){
+  //     flock.elements[i].Move(2*dt);
+  //     println("movePert: " + movePert);
+  //   }
+  // }
+
+}
 
 /// ====================================== /// ====================================== ///
 

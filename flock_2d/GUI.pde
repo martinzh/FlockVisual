@@ -156,7 +156,15 @@ public class ControlFrame extends PApplet {
     cp5.addToggle("movePert")
       .plugTo(parent,"movePert")
       .setValue(0)
-      .setPosition(180,210)
+      .setPosition(170,210)
+      .setSize(30,30)
+      .updateSize()
+    ;
+
+    cp5.addButton("rampPert")
+      .plugTo(parent,"rampPert")
+      // .setValue(0)
+      .setPosition(230,210)
       .setSize(30,30)
       .updateSize()
     ;

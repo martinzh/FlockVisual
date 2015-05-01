@@ -36,7 +36,7 @@ float vo = 1.0;
 // float eta; // magnitud de ruido
 float eta; // magnitud de ruido
 float r; // radio de interaccion local
-float dt = 1.0;
+float dt = 0.1;
 float omega; // peso relativo entre vecindades 
 float pertMag;
 int k = 1, n, go, topo, geom, bac, fluct, full, pert, numPerts, movePert;
@@ -57,7 +57,8 @@ void setup() {
 	cp5 = new ControlP5(this);
 	cf = addControlFrame("parameters", 300, 280);
 
-	r = vo * dt / l;
+	// r = vo * dt / l;
+	r = vo / l;
 	n = (int)(r*r*p);
 
 	// pred = new Agent2D(l,vo,0,r);
