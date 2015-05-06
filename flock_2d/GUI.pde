@@ -169,6 +169,30 @@ public class ControlFrame extends PApplet {
       .updateSize()
     ;
 
+    cp5.addButton("setPred")
+      .plugTo(parent,"setPred")
+      // .setValue(0)
+      .setPosition(110,260)
+      .setSize(30,30)
+      .updateSize()
+    ;
+
+    cp5.addToggle("movePred")
+      .plugTo(parent,"movePred")
+      .setValue(0)
+      .setPosition(170,260)
+      .setSize(30,30)
+      .updateSize()
+    ;
+
+    cp5.addToggle("turnPred")
+      .plugTo(parent,"turnPred")
+      .setValue(0)
+      .setPosition(230,260)
+      .setSize(30,30)
+      .updateSize()
+    ;
+
     // cp5.addSlider("dt")
     //   .plugTo(parent,"dt")
     //   .setRange(0.25,2.5)

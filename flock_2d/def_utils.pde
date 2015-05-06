@@ -1,5 +1,56 @@
 
 /// ====================================== /// ====================================== ///
+  void setupSystem(){
+        // r = vo * dt / l;
+    r       = vo / l;
+    n       = (int)(r*r*p);
+    
+    flock   = new Flock(n,tam*r,vo,k,r);
+    
+    locAdjs = new float[n][n];
+    locAngs = new float[n];
+    inAngs  = new float[n];
+
+    for (int i = 0; i < n; ++i) {
+      for (int j = 0; j < n; ++j) {
+        locAdjs[i][j] = 0.0;
+      }
+    }
+
+    for (int i = 0; i < n; ++i) {
+      locAngs[i] = inAngs[i] = 0.0;
+    }
+  }
+
+/// ====================================== /// ====================================== ///
+
+  void setupSystemPred(){
+        // r = vo * dt / l;
+    r       = vo / l;
+    n       = (int)(r*r*p);
+    
+    pred    = new Agent2D(0.0,vo,0,r);
+    
+    flock   = new Flock(n,tam*r,vo,k,r);
+    
+    locAdjs = new float[n][n];
+    locAngs = new float[n];
+    inAngs  = new float[n];
+    
+    for (int i = 0; i < n; ++i) {
+      for (int j = 0; j < n; ++j) {
+        locAdjs[i][j] = 0.0;
+      }
+    }
+
+    for (int i = 0; i < n; ++i) {
+      locAngs[i] = inAngs[i] = 0.0;
+    }
+    
+  }
+
+
+/// ====================================== /// ====================================== ///
 
 float Factorial(int n){
 
@@ -89,6 +140,16 @@ void reset(){
     o.vel.mult(vo);
   }
 
+  for (int i = 0; i < n; ++i) {
+    for (int j = 0; j < n; ++j) {
+        locAdjs[i][j] = 0.0;
+      }
+    }
+
+    for (int i = 0; i < n; ++i) {
+      locAngs[i] = inAngs[i] = 0.0;
+    }
+
   // pred.pos.set(random(-l, l), random(-l, l));
   // pred.vel = PVector.random2D();
   // pred.vel.mult(vo);
@@ -130,8 +191,8 @@ void rampPert(){
   float i = 0;
 
   while (i < 0.5) {
+    // flock.elements[0].Move(dt);
     flock.elements[0].vel.rotate(i*PI);
-    flock.elements[0].Move(dt);
 
     i += 0.001;
   }
@@ -144,6 +205,49 @@ void rampPert(){
   // }
 
 }
+
+// void rampPert(int val){
+
+//   float i = 0;
+
+//   while (i < 0.01) {
+//     pred.Move(dt*0.25);
+//     // pred.vel.rotate(i*PI);
+
+//     i += 0.00001;
+//   }
+
+// }
+
+/// ====================================== /// ====================================== ///
+
+void setPred(){
+
+  float l = -100.0;
+
+  pred.pos.x = l;
+  pred.pos.y = 0;
+
+  pred.vel.x = flock.velCM.x;
+  pred.vel.y = flock.velCM.y;
+
+  
+}
+
+void perturbation(){
+
+    pred.Move(2*dt);
+}
+
+void turn(float t){
+
+    // println("var: "+((t/10.0)%1.0));
+
+    float r = map(t, 0, frameCount, 0.0, 0.5);
+
+    pred.vel.rotate(log(r)*PI);
+    
+  }
 
 /// ====================================== /// ====================================== ///
 

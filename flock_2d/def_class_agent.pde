@@ -47,7 +47,6 @@ class Agent2D
 
      void Move(float dt){
 
-        // PVector paso = vel.mult(dt);
         PVector paso = PVector.mult(vel,dt);
         pos.add(paso);
     }
@@ -71,9 +70,11 @@ class Agent2D
 /// ====================================== /// ====================================== ///
 
     void Show_Pred(){
-        stroke(255,255,255);
-        ellipse(this.pos.x, this.pos.y, 10, 10);
-        line(this.pos.x, this.pos.y, this.pos.x + arr*this.vel.x , this.pos.y + arr*this.vel.y);
+        colorMode(RGB);
+        stroke(0,0,255);
+        ellipse(this.pos.x, this.pos.y, 5, 5);
+        // line(this.pos.x, this.pos.y, this.pos.x + arr*this.vel.x , this.pos.y + arr*this.vel.y);
+        arrow(this.pos.x, this.pos.y, this.pos.x + 2*arr*this.vel.x, this.pos.y + 2*arr*this.vel.y);
     }
 
 /// ====================================== /// ====================================== ///
@@ -317,8 +318,7 @@ class Agent2D
             for (int x : this.links) {
                 prom_topo.add(elements[x].vel);
             }
-            prom_topo.mult(1/(n_t));
-            // prom.mult(1/(n+1));
+            prom_topo.div(n_t);
         }
 
     //=============================================================================
@@ -342,7 +342,7 @@ class Agent2D
         }
 
         // if (n_g != 0) prom_geom.mult(1/(n_g+1));
-        prom_geom.mult(1/(n_g));
+        prom_geom.div(n_g);
 
     //=============================================================================
 

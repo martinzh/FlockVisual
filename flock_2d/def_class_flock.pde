@@ -77,9 +77,106 @@ class Flock
         stroke(255,0,0);
         strokeWeight(1);
 
-        // arrow(posCM.x, posCM.y, posCM.x + arr * velCM.x, posCM.y + arr * velCM.y);
         arrow(0, 0, mult*arr * velCM.x, mult*arr * velCM.y);
 
+    }
+
+/// ====================================== /// ====================================== ///
+
+    // void setSR(Agent2D[] elements, float[][] locAdjs) {
+    void setSR(float[][] locAdjs) {
+
+        float d;
+        float r = elements[0].r;
+
+        for (int i = 0; i < elements.length; ++i) {
+            for (int j = i+1; j < elements.length; ++j) {
+                d = elements[i].pos.dist(elements[j].pos);
+                if (d <= r) {
+                    locAdjs[i][j] = locAdjs[j][i] = 1.0;
+                }
+            }
+        }
+
+    }
+
+/// ====================================== /// ====================================== ///
+
+    // void getAngs(Agent2D[] elements, float[][] locAdjs, float[] angs) {
+    void getAngs(float[][] locAdjs, float[] angs) {
+
+        PVector vProm = new PVector();
+        float k = 0.0;
+
+        for (int i = 0; i < elements.length; ++i) {
+            vProm.x = 0.0;
+            vProm.y = 0.0;
+            k = 0.0;
+            for (int j = 0; j < elements.length; ++j) {
+                vProm.add(PVector.mult(elements[j].vel,locAdjs[i][j]));
+                k += locAdjs[i][j];
+            }
+            if (k > 0.0) {
+                angs[i] = calc_ang(elements[i].vel,PVector.div(vProm,k));
+            }else {
+                angs[i] = 0.0;
+            }
+        }
+    }
+
+/// ====================================== /// ====================================== ///
+
+    // void getAngsIN(Agent2D[] elements, float[][] locAdjs, float[] angs) {
+    void getAngsIN(float[] angs) {
+
+        PVector vProm = new PVector();
+        float k = elements[0].links.length;
+
+        for (int i = 0; i < elements.length; ++i) {
+            vProm.x = 0.0;
+            vProm.y = 0.0;
+            for (int j = 0; j < k; ++j) {
+                vProm.add(elements[elements[i].links[j]].vel);
+            }
+            angs[i] = calc_ang(elements[i].vel,PVector.div(vProm,k));
+        }
+    }
+
+/// ====================================== /// ====================================== ///
+    
+    void updateVels(float[][] locAdjs, float[] locAngs, float[] inAngs){
+        setSR(locAdjs);
+        getAngs(locAdjs,locAngs);
+        getAngsIN(inAngs);
+
+        float ang_tot = 0.0;
+
+        for (int i = 0; i < elements.length; ++i) {
+
+            // ang_rand = random(-PI, PI);
+            // ang_tot = omega * (inAngs[i]) + (1.0 - omega) * (locAngs[i]) + ang_rand*eta;
+
+            ang_tot = omega * (inAngs[i]) + (1.0 - omega) * (locAngs[i]) + random(-PI,PI)*eta;
+            elements[i].vel.rotate(ang_tot);
+        }
+
+    }
+    
+/// ====================================== /// ====================================== ///
+
+    // void Update(double dt, double pg, double pt){
+    void Update(float dt, int go, float[][] locAdjs, float[] locAngs, float[] inAngs){
+
+        calcCM();
+
+        if (go ==1){
+
+            updateVels(locAdjs, locAngs, inAngs);
+
+            for(Agent2D agent : elements){
+                    agent.Move(dt);
+                }
+        }
     }
 
 /// ====================================== /// ====================================== ///
@@ -89,16 +186,12 @@ class Flock
 
         calcCM();
 
-        for(Agent2D agent : elements){
-
-            // agent.Show();
-            agent.ShowPoint();
-
-            if (p ==1){
-                agent.AlignBoth(elements);
-                agent.Predator(pred, dt);
-                agent.Move(dt);
-            }
+        if (p ==1){
+            for(Agent2D agent : elements){
+                    agent.AlignBoth(elements);
+                    agent.Predator(pred, dt);
+                    agent.Move(dt);
+                }
         }
     }
 
@@ -108,12 +201,8 @@ class Flock
 
         showCM();
 
-        for(Agent2D agent : elements){
-
-            // agent.Show();
-            // agent.ShowPoint();
-
-            if (p ==1){
+        if (p ==1){
+            for(Agent2D agent : elements){
                 agent.AlignBoth(elements);
                 agent.Move(dt);
             }
@@ -128,8 +217,8 @@ class Flock
 
         if (pert == 1) {
 
-            for (int i = 0; i < n; ++i) {
-                if (p ==1){
+            if (p ==1){
+                for (int i = 0; i < n; ++i) {
                     if(i != 0) flock.elements[i].AlignBoth(elements);
                     flock.elements[i].Move(dt);
                 }                
@@ -138,12 +227,8 @@ class Flock
         }
         else{
 
-            for(Agent2D agent : elements){
-
-                // agent.Show();
-                // agent.ShowPoint(posCM);
-
-                if (p ==1){
+            if (p ==1){
+                for(Agent2D agent : elements){
                     agent.AlignBoth(elements);
                     agent.Move(dt);
                 }

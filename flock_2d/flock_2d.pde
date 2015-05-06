@@ -29,21 +29,27 @@ ControlFrame cf;
 /// ====================================== /// ====================================== ///
 
 Flock flock;
-// Agent2D pred;
+Agent2D pred;
 
 float l = 0.1; // regimen de velocidad
 float vo = 1.0;
 // float eta; // magnitud de ruido
 float eta; // magnitud de ruido
 float r; // radio de interaccion local
-float dt = 0.1;
+float dt = 1;
 float omega; // peso relativo entre vecindades 
 float pertMag;
-int k = 1, n, go, topo, geom, bac, fluct, full, pert, numPerts, movePert;
+int k = 2, n, go, topo, geom, bac, fluct, full, pert, numPerts, movePert, movePred, turnPred;
 float s = 1;
 float p = 10; // densidad 
 float tam = 10; // region cuadrada inicial
 int col = 80;
+
+float[][] locAdjs;
+float[] locAngs;
+float[] inAngs;
+
+int t = 0;
 
 /// ====================================== /// ====================================== ///
 
@@ -55,17 +61,10 @@ void setup() {
 	background(80);
 
 	cp5 = new ControlP5(this);
-	cf = addControlFrame("parameters", 300, 280);
+	cf = addControlFrame("parameters", 300, 340);
 
-	// r = vo * dt / l;
-	r = vo / l;
-	n = (int)(r*r*p);
-
-	// pred = new Agent2D(l,vo,0,r);
-
-	flock = new Flock(n,tam*r,vo,k,r);
-	// flock = new Flock(n,l,vo,r);
-
+	// setupSystem();
+	setupSystemPred();
 }
 
 /// ====================================== /// ====================================== ///
@@ -82,15 +81,15 @@ void draw() {
 
 	scale(s);
 
-	flock.calcCM();
+	// flock.calcCM();
 	
 	// flock.Update(dt, go);
-	flock.Update(dt, go);
-	
-
-	// flock.Update(dt,go);
 	// flock.Update(dt,go, pred);
-	// pred_update(go);
+	flock.Update(dt,go,locAdjs,locAngs,inAngs);
+
+	flock.showCM();
+	
+	pred.Show_Pred();
 
 	for(int i = 0; i < n; i ++){
 
@@ -110,7 +109,11 @@ void draw() {
 			// flock.elements[i].ShowFluctVel(flock.posCM, flock.velCM, flock.elements[0].vel,col);
 			// flock.elements[i].ShowFluctVel(flock.posCM, flock.velCM);
 	}
+
+	if(movePred == 1) perturbation();
+	if(turnPred == 1) turn(t);
 	
+	t ++;
 }
 
 /// ====================================== /// ====================================== ///
