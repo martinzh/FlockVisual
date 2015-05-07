@@ -112,7 +112,7 @@ public class ControlFrame extends PApplet {
 
     cp5.addSlider("eta")
       .plugTo(parent,"eta")
-      .setRange(0.0,0.6)
+      .setRange(0.0,1.0)
       .setValue(0.05)
       .setPosition(110,115)
       .setSize(120,20)
@@ -169,52 +169,96 @@ public class ControlFrame extends PApplet {
       .updateSize()
     ;
 
-    cp5.addButton("setPred")
-      .plugTo(parent,"setPred")
-      // .setValue(0)
-      .setPosition(110,260)
-      .setSize(30,30)
-      .updateSize()
-    ;
+    // cp5.addButton("setPred")
+    //   .plugTo(parent,"setPred")
+    //   // .setValue(0)
+    //   .setPosition(110,260)
+    //   .setSize(30,30)
+    //   .updateSize()
+    // ;
 
-    cp5.addToggle("movePred")
-      .plugTo(parent,"movePred")
-      .setValue(0)
-      .setPosition(170,260)
-      .setSize(30,30)
-      .updateSize()
-    ;
+    // cp5.addToggle("movePred")
+    //   .plugTo(parent,"movePred")
+    //   .setValue(0)
+    //   .setPosition(170,260)
+    //   .setSize(30,30)
+    //   .updateSize()
+    // ;
 
-    cp5.addToggle("turnPred")
-      .plugTo(parent,"turnPred")
-      .setValue(0)
-      .setPosition(230,260)
-      .setSize(30,30)
-      .updateSize()
-    ;
+    // cp5.addToggle("turnPred")
+    //   .plugTo(parent,"turnPred")
+    //   .setValue(0)
+    //   .setPosition(230,260)
+    //   .setSize(30,30)
+    //   .updateSize()
+    // ;
 
-    // cp5.addSlider("dt")
-    //   .plugTo(parent,"dt")
-    //   .setRange(0.25,2.5)
-    //   .setValue(0.5)
-    //   .setPosition(70,10)
+    // cp5.addSlider("speed")
+    //   .plugTo(parent,"speed")
+    //   .setRange(50.0,500.0)
+    //   .setValue(100.0)
+    //   .setPosition(110,320)
     //   .setSize(120,20)
     //   .updateSize()
     // ;
 
-    // cp5.addSlider("radio")
-    //   .plugTo(parent,"radio")
-    //   .setRange(1,30)
-    //   .setValue(5.0)
-    //   .setPosition(180,100)
-    //   .setSize(120,20)
-    //   .updateSize()
-    // ;
 
   }
 
   public void draw() {
       background(80);
+      stroke(255);
+      line(300, 10, 300, 300);
+
+      fill(255);
+      text("Psi =" + psi, 320,20);
+
+      pushMatrix();
+      
+      translate(320, 50);
+      
+
+      // line(0,0,0,50);
+      line(0,50,100,50);
+
+      float y = map(psi,0.0,1.0,0.0,50.0);
+      float x = t%100;
+
+      fill(255,0,0,50);
+      stroke(255,0,0);
+
+      beginShape();
+
+      vertex(0,0);
+      vertex(0,50);
+      vertex(x,50);
+      vertex(x,50-y);
+
+      endShape(CLOSE);
+
+      stroke(255,0,0);
+      line(x,50,x,50-y);
+
+      popMatrix();
+
+      pushMatrix();
+      translate(300+(450-300)*0.5, 180);
+      stroke(255);
+      line(-50,0,50,0);
+      line(0,-50,0,50);
+
+      float vX = map(flock.velCM.x, 0.0, 1.0, 5, 50 );
+      float vY = map(flock.velCM.y, 0.0, 1.0, 5, 50 );
+
+      stroke(255,0,0);
+      
+      strokeWeight(2.5);
+
+      line(0,0,vX,vY);
+      popMatrix();
+
+      strokeWeight(1);
+
   }
   
   private ControlFrame() {

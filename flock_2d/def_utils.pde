@@ -20,6 +20,8 @@
     for (int i = 0; i < n; ++i) {
       locAngs[i] = inAngs[i] = 0.0;
     }
+
+    vecPsi = new PVector();
   }
 
 /// ====================================== /// ====================================== ///
@@ -46,6 +48,8 @@
     for (int i = 0; i < n; ++i) {
       locAngs[i] = inAngs[i] = 0.0;
     }
+
+    velPert = new PVector();
     
   }
 
@@ -108,6 +112,21 @@ void arrow(float x1, float y1, float x2, float y2) {
 
 /// ====================================== /// ====================================== ///
 
+ void calcPsi(Flock flock){
+
+    vecPsi.x = 0.0;
+    vecPsi.y = 0.0;
+    
+    for (Agent2D part : flock.elements) {
+      vecPsi.add(part.vel);
+    }
+
+    psi = sqrt(vecPsi.x * vecPsi.x + vecPsi.y * vecPsi.y)/float(flock.elements.length);
+
+ }
+
+/// ====================================== /// ====================================== ///
+
 void ShowNetwork(int i){
   if(topo == 1) flock.elements[i].ShowTopoLinks(flock.elements);
   if(geom == 1) flock.elements[i].ShowGeomLinks(flock.elements);
@@ -120,6 +139,31 @@ void ShowNetwork(int i, PVector posCM){
   // flock.elements[i].ShowRadius();
 }
 
+void ShowVels(int i, PVector posCM){
+    if(full == 1) flock.elements[i].ShowPoint(flock.posCM);
+    if(fluct == 1) flock.elements[i].ShowFluctVel(flock.posCM, flock.velCM);
+}
+
+void ShowPerts(){
+    if(pert == 1) {
+
+    for (int j = 0; j < numPerts; ++j) {
+      
+      flock.elements[j].ShowPoint(flock.posCM, col);
+    }
+
+  }
+}
+
+void drawPartsAndVels(){
+    for(int i = 0; i < n; i ++){
+
+    // ShowNetwork(i);
+    ShowNetwork(i, flock.posCM);
+    ShowVels(i, flock.posCM);
+
+  }
+}
 /// ====================================== /// ====================================== ///
 
 void radio(float rr){
@@ -221,33 +265,41 @@ void rampPert(){
 
 /// ====================================== /// ====================================== ///
 
-void setPred(){
+// void setPred(){
 
-  float l = -100.0;
+//   float l = -150.0;
 
-  pred.pos.x = l;
-  pred.pos.y = 0;
+//   pred.pos.x = l;
+//   pred.pos.y = 0;
 
-  pred.vel.x = flock.velCM.x;
-  pred.vel.y = flock.velCM.y;
+//   velPert = flock.velCM;
 
+//   // pred.vel.x = flock.velCM.x;
+//   // pred.vel.y = flock.velCM.y;
+
+//   // pred.vel.x = velPert.x;
+//   // pred.vel.y = velPert.y;
+
+//   pred.vel = velPert;
   
-}
+// }
 
-void perturbation(){
+// void perturbation(){
+//     pred.Move(2*dt);
+// }
 
-    pred.Move(2*dt);
-}
+// void turn(float t){
 
-void turn(float t){
+//     // PVector vel = new PVector(pred.vel.x,pred.vel.y);
 
-    // println("var: "+((t/10.0)%1.0));
+//     float r = map(t/speed, 0.0, 1.0, 0.0, 0.5);
 
-    float r = map(t, 0, frameCount, 0.0, 0.5);
-
-    pred.vel.rotate(log(r)*PI);
+//     velPert.rotate(r*PI);
+//     pred.vel = velPert;
     
-  }
+//     // println("velPert: "+velPert);
+//     // println("pred.vel: "+pred.vel);
+//   }
 
 /// ====================================== /// ====================================== ///
 

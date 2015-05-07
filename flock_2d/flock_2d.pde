@@ -13,7 +13,9 @@
 									 // Traslado a centro de masa
 									 // Visualizacion de Fluctuaciones de Velocidad
 // Abr·8·2015 ---->	Arreglo de GUI
-									// Incluye perturbaciones y visualizacione
+									// Incluye perturbaciones y visualizaciones
+// May·6·2015 ---->	Perturbaciones con giro
+
 									
 /// ====================================== /// ====================================== ///
 
@@ -29,21 +31,26 @@ ControlFrame cf;
 /// ====================================== /// ====================================== ///
 
 Flock flock;
+
 Agent2D pred;
+PVector velPert;
+
+PVector vecPsi;
+float psi;
 
 float l = 0.1; // regimen de velocidad
 float vo = 1.0;
-// float eta; // magnitud de ruido
 float eta; // magnitud de ruido
 float r; // radio de interaccion local
-float dt = 1;
+float dt = 1.0;
 float omega; // peso relativo entre vecindades 
 float pertMag;
 int k = 2, n, go, topo, geom, bac, fluct, full, pert, numPerts, movePert, movePred, turnPred;
 float s = 1;
-float p = 10; // densidad 
+float p = 12; // densidad 
 float tam = 10; // region cuadrada inicial
 int col = 80;
+float speed, beh = 1.0;
 
 float[][] locAdjs;
 float[] locAngs;
@@ -61,10 +68,13 @@ void setup() {
 	background(80);
 
 	cp5 = new ControlP5(this);
-	cf = addControlFrame("parameters", 300, 340);
+	cf = addControlFrame("parameters", 450, 320);
+	// cf = addControlFrame("parameters", 300, 420);
 
-	// setupSystem();
-	setupSystemPred();
+	setupSystem();
+	// setupSystemPred();
+	PFont font = createFont("Courier",10);
+	textFont(font, 10);
 }
 
 /// ====================================== /// ====================================== ///
@@ -81,38 +91,23 @@ void draw() {
 
 	scale(s);
 
-	// flock.calcCM();
+	// flock.showCM();
+	calcPsi(flock);
 	
+	// pred.Show_Pred();
+
+	drawPartsAndVels();
+	ShowPerts();
+
+	// if(turnPred == 1) turn(t);
+	// if(movePred == 1) perturbation();
+
 	// flock.Update(dt, go);
-	// flock.Update(dt,go, pred);
+	// flock.Update(dt,go, pred, beh);
 	flock.Update(dt,go,locAdjs,locAngs,inAngs);
+	// flock.Update(dt,go,locAdjs,locAngs,inAngs, pred, beh);
 
-	flock.showCM();
-	
-	pred.Show_Pred();
 
-	for(int i = 0; i < n; i ++){
-
-		// ShowNetwork(i);
-		ShowNetwork(i, flock.posCM);
-
-		if(full == 1) flock.elements[i].ShowPoint(flock.posCM);
-		if(fluct == 1) flock.elements[i].ShowFluctVel(flock.posCM, flock.velCM);
-	}
-		
-	if(pert == 1) {
-		for (int j = 0; j < numPerts; ++j) {
-			
-			flock.elements[j].ShowPoint(flock.posCM, col);
-		}
-			// if(i == 0) flock.elements[i].ShowPoint(flock.posCM, col);
-			// flock.elements[i].ShowFluctVel(flock.posCM, flock.velCM, flock.elements[0].vel,col);
-			// flock.elements[i].ShowFluctVel(flock.posCM, flock.velCM);
-	}
-
-	if(movePred == 1) perturbation();
-	if(turnPred == 1) turn(t);
-	
 	t ++;
 }
 

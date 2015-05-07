@@ -372,12 +372,15 @@ class Agent2D
 
 /// ====================================== /// ====================================== ///
 
-    void Predator( Agent2D pred, float dt){
+    void Predator( Agent2D pred, float dt, float beh){
 
-        if (pos.dist(pred.pos) <= 10*r ) {
-            float ang = calc_ang(vel,pred.vel) ;
-            vel.rotate(-ang/4);
-            Move(4*dt);
+        float sc = 1.0;
+        float ang;
+        
+        if (pos.dist(pred.pos) <= sc*r ) {
+            ang = calc_ang(vel,pred.vel) ;
+            vel.rotate(beh*ang);
+            // Move(2*dt);
         }
     }
 

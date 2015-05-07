@@ -179,17 +179,32 @@ class Flock
         }
     }
 
+    void Update(float dt, int go, float[][] locAdjs, float[] locAngs, float[] inAngs, Agent2D pred, float beh){
+
+        calcCM();
+
+        if (go ==1){
+
+            updateVels(locAdjs, locAngs, inAngs);
+
+            for(Agent2D agent : elements){
+                    agent.Predator(pred, dt, beh);
+                    agent.Move(dt);
+                }
+        }
+    }
+
 /// ====================================== /// ====================================== ///
 
     // void Update(double dt, double pg, double pt){
-    void Update(float dt, int p, Agent2D pred){
+    void Update(float dt, int p, Agent2D pred, float beh){
 
         calcCM();
 
         if (p ==1){
             for(Agent2D agent : elements){
                     agent.AlignBoth(elements);
-                    agent.Predator(pred, dt);
+                    agent.Predator(pred, dt, beh);
                     agent.Move(dt);
                 }
         }
