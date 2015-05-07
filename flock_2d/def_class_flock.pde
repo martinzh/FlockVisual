@@ -102,7 +102,6 @@ class Flock
 
 /// ====================================== /// ====================================== ///
 
-    // void getAngs(Agent2D[] elements, float[][] locAdjs, float[] angs) {
     void getAngs(float[][] locAdjs, float[] angs) {
 
         PVector vProm = new PVector();
@@ -126,7 +125,6 @@ class Flock
 
 /// ====================================== /// ====================================== ///
 
-    // void getAngsIN(Agent2D[] elements, float[][] locAdjs, float[] angs) {
     void getAngsIN(float[] angs) {
 
         PVector vProm = new PVector();
@@ -144,7 +142,7 @@ class Flock
 
 /// ====================================== /// ====================================== ///
     
-    void updateVels(float[][] locAdjs, float[] locAngs, float[] inAngs){
+    void updateVels(float[][] locAdjs, float[] locAngs, float[] inAngs, float[] ruido){
         setSR(locAdjs);
         getAngs(locAdjs,locAngs);
         getAngsIN(inAngs);
@@ -153,25 +151,59 @@ class Flock
 
         for (int i = 0; i < elements.length; ++i) {
 
-            // ang_rand = random(-PI, PI);
-            // ang_tot = omega * (inAngs[i]) + (1.0 - omega) * (locAngs[i]) + ang_rand*eta;
-
-            ang_tot = omega * (inAngs[i]) + (1.0 - omega) * (locAngs[i]) + random(-PI,PI)*eta;
+            ang_tot = omega * (inAngs[i]) + (1.0 - omega) * (locAngs[i]) + ruido[i];
             elements[i].vel.rotate(ang_tot);
         }
 
     }
     
+    void updateVelsPert(float[][] locAdjs, float[] locAngs, float[] inAngs, float[] ruido, PVector velPert){
+        setSR(locAdjs);
+        getAngs(locAdjs,locAngs);
+        getAngsIN(inAngs);
+
+        float ang_tot = 0.0;
+
+        for (int i = 1; i < elements.length; ++i) {
+
+            ang_tot = omega * (inAngs[i]) + (1.0 - omega) * (locAngs[i]) + ruido[i];
+            elements[i].vel.rotate(ang_tot);
+        }
+
+        elements[0].vel.x = velPert.x;
+        elements[0].vel.y = velPert.y;
+
+    }
+
+    void updateVelsPert(float[][] locAdjs, float[] locAngs, float[] inAngs, float[] ruido, PVector velPert, int partPert){
+        setSR(locAdjs);
+        getAngs(locAdjs,locAngs);
+        getAngsIN(inAngs);
+
+        float ang_tot = 0.0;
+
+        for (int i = 0; i < elements.length; ++i) {
+
+            if (i != partPert) {
+                ang_tot = omega * (inAngs[i]) + (1.0 - omega) * (locAngs[i]) + ruido[i];
+                elements[i].vel.rotate(ang_tot);
+            }
+        }
+
+        elements[partPert].vel.x = velPert.x;
+        elements[partPert].vel.y = velPert.y;
+
+    }
+    
 /// ====================================== /// ====================================== ///
 
-    // void Update(double dt, double pg, double pt){
-    void Update(float dt, int go, float[][] locAdjs, float[] locAngs, float[] inAngs){
+    void Update(float dt, int go, float[][] locAdjs, float[] locAngs, float[] inAngs, float[] ruido){
 
         calcCM();
 
         if (go ==1){
 
-            updateVels(locAdjs, locAngs, inAngs);
+            updateVels(locAdjs, locAngs, inAngs, ruido);
 
             for(Agent2D agent : elements){
                     agent.Move(dt);
@@ -179,16 +211,29 @@ class Flock
         }
     }
 
-    void Update(float dt, int go, float[][] locAdjs, float[] locAngs, float[] inAngs, Agent2D pred, float beh){
+    void Update(float dt, int go, float[][] locAdjs, float[] locAngs, float[] inAngs, float[] ruido, PVector velPert){
 
         calcCM();
 
         if (go ==1){
 
-            updateVels(locAdjs, locAngs, inAngs);
+            updateVelsPert(locAdjs, locAngs, inAngs, ruido, velPert);
 
             for(Agent2D agent : elements){
-                    agent.Predator(pred, dt, beh);
+                    agent.Move(dt);
+                }
+        }
+    }
+
+    void Update(float dt, int go, float[][] locAdjs, float[] locAngs, float[] inAngs, float[] ruido, PVector velPert, int partPert){
+
+        calcCM();
+
+        if (go ==1){
+
+            updateVelsPert(locAdjs, locAngs, inAngs, ruido, velPert, partPert);
+
+            for(Agent2D agent : elements){
                     agent.Move(dt);
                 }
         }
@@ -196,7 +241,6 @@ class Flock
 
 /// ====================================== /// ====================================== ///
 
-    // void Update(double dt, double pg, double pt){
     void Update(float dt, int p, Agent2D pred, float beh){
 
         calcCM();

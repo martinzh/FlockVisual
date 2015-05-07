@@ -10,6 +10,8 @@
     locAdjs = new float[n][n];
     locAngs = new float[n];
     inAngs  = new float[n];
+    ruido  = new float[n];
+
 
     for (int i = 0; i < n; ++i) {
       for (int j = 0; j < n; ++j) {
@@ -155,6 +157,12 @@ void ShowPerts(){
   }
 }
 
+void ShowPerts(int partPert){
+    if(pert == 1) {
+      flock.elements[partPert].ShowPoint(flock.posCM, col);
+  }
+}
+
 void drawPartsAndVels(){
     for(int i = 0; i < n; i ++){
 
@@ -164,6 +172,14 @@ void drawPartsAndVels(){
 
   }
 }
+/// ====================================== /// ====================================== ///
+  
+void setRuido(){
+  for (int i = 0; i < ruido.length; ++i) {
+    ruido[i] = random(-PI,PI)*eta;
+  }
+}
+
 /// ====================================== /// ====================================== ///
 
 void radio(float rr){
@@ -250,56 +266,34 @@ void rampPert(){
 
 }
 
-// void rampPert(int val){
-
-//   float i = 0;
-
-//   while (i < 0.01) {
-//     pred.Move(dt*0.25);
-//     // pred.vel.rotate(i*PI);
-
-//     i += 0.00001;
-//   }
-
-// }
-
 /// ====================================== /// ====================================== ///
 
-// void setPred(){
+void slctP(){
+  partPert = int(random(0, flock.elements.length));
+}
 
-//   float l = -150.0;
 
-//   pred.pos.x = l;
-//   pred.pos.y = 0;
+void setPred(){
 
-//   velPert = flock.velCM;
-
-//   // pred.vel.x = flock.velCM.x;
-//   // pred.vel.y = flock.velCM.y;
-
-//   // pred.vel.x = velPert.x;
-//   // pred.vel.y = velPert.y;
-
-//   pred.vel = velPert;
+  float l = -150.0;
+  velPert = flock.elements[partPert].vel;
   
-// }
+}
 
 // void perturbation(){
 //     pred.Move(2*dt);
 // }
 
-// void turn(float t){
+void turnVelPert(int sign){
 
-//     // PVector vel = new PVector(pred.vel.x,pred.vel.y);
-
-//     float r = map(t/speed, 0.0, 1.0, 0.0, 0.5);
-
-//     velPert.rotate(r*PI);
-//     pred.vel = velPert;
-    
-//     // println("velPert: "+velPert);
-//     // println("pred.vel: "+pred.vel);
-//   }
+    if (sign == 0) {
+      velPert.rotate(radians(speed));
+    }else{
+      velPert.rotate(-1.0*radians(speed));
+    }
+    // println("velPert: "+velPert);
+    // println("pred.vel: "+pred.vel);
+  }
 
 /// ====================================== /// ====================================== ///
 

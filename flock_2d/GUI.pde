@@ -9,7 +9,7 @@ ControlFrame addControlFrame(String theName, int theWidth, int theHeight) {
   p.init();
   f.setTitle(theName);
   f.setSize(p.w, p.h);
-  f.setLocation(100, 100);
+  f.setLocation(0, 0);
   f.setResizable(false);
   f.setVisible(true);
   return p;
@@ -119,10 +119,18 @@ public class ControlFrame extends PApplet {
       .updateSize()
     ;
 
+    cp5.addToggle("shCM")
+      .plugTo(parent,"shCM")
+      .setValue(0)
+      .setPosition(20,160)
+      .setSize(30,30)
+      .updateSize()
+    ;
+
     cp5.addToggle("pert")
       .plugTo(parent,"pert")
       .setValue(0)
-      .setPosition(20,160)
+      .setPosition(60,160)
       .setSize(30,30)
       .updateSize()
     ;
@@ -169,38 +177,54 @@ public class ControlFrame extends PApplet {
       .updateSize()
     ;
 
-    // cp5.addButton("setPred")
-    //   .plugTo(parent,"setPred")
-    //   // .setValue(0)
-    //   .setPosition(110,260)
-    //   .setSize(30,30)
-    //   .updateSize()
-    // ;
+    cp5.addButton("setPred")
+      .plugTo(parent,"setPred")
+      // .setValue(0)
+      .setPosition(110,260)
+      .setSize(30,30)
+      .updateSize()
+    ;
 
-    // cp5.addToggle("movePred")
-    //   .plugTo(parent,"movePred")
-    //   .setValue(0)
-    //   .setPosition(170,260)
-    //   .setSize(30,30)
-    //   .updateSize()
-    // ;
+    cp5.addToggle("movePred")
+      .plugTo(parent,"movePred")
+      .setValue(0)
+      .setPosition(170,260)
+      .setSize(30,30)
+      .updateSize()
+    ;
 
-    // cp5.addToggle("turnPred")
-    //   .plugTo(parent,"turnPred")
-    //   .setValue(0)
-    //   .setPosition(230,260)
-    //   .setSize(30,30)
-    //   .updateSize()
-    // ;
+    cp5.addToggle("turnPred")
+      .plugTo(parent,"turnPred")
+      .setValue(0)
+      .setPosition(230,260)
+      .setSize(30,30)
+      .updateSize()
+    ;
+    
+    cp5.addToggle("dirRot")
+      .plugTo(parent,"dirRot")
+      .setValue(0)
+      .setPosition(60,260)
+      .setSize(30,30)
+      .updateSize()
+    ;
 
-    // cp5.addSlider("speed")
-    //   .plugTo(parent,"speed")
-    //   .setRange(50.0,500.0)
-    //   .setValue(100.0)
-    //   .setPosition(110,320)
-    //   .setSize(120,20)
-    //   .updateSize()
-    // ;
+    cp5.addButton("slctP")
+      .plugTo(parent,"slctP")
+      // .setValue(0)
+      .setPosition(20,260)
+      .setSize(30,30)
+      .updateSize()
+    ;
+
+    cp5.addSlider("speed")
+      .plugTo(parent,"speed")
+      .setRange(0.0,2.0)
+      .setValue(0.0)
+      .setPosition(20,320)
+      .setSize(120,20)
+      .updateSize()
+    ;
 
 
   }
@@ -211,14 +235,12 @@ public class ControlFrame extends PApplet {
       line(300, 10, 300, 300);
 
       fill(255);
-      text("Psi =" + psi, 320,20);
+      text("Psi =" + psi, 320,30);
 
       pushMatrix();
       
       translate(320, 50);
       
-
-      // line(0,0,0,50);
       line(0,50,100,50);
 
       float y = map(psi,0.0,1.0,0.0,50.0);

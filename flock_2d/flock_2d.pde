@@ -45,9 +45,11 @@ float r; // radio de interaccion local
 float dt = 1.0;
 float omega; // peso relativo entre vecindades 
 float pertMag;
-int k = 2, n, go, topo, geom, bac, fluct, full, pert, numPerts, movePert, movePred, turnPred;
+int k = 2, n, go, topo, geom, bac, fluct, 
+		full, pert, numPerts, movePert, movePred, 
+		shCM, turnPred, dirRot, partPert = 0;
 float s = 1;
-float p = 12; // densidad 
+float p = 15; // densidad 
 float tam = 10; // region cuadrada inicial
 int col = 80;
 float speed, beh = 1.0;
@@ -55,6 +57,7 @@ float speed, beh = 1.0;
 float[][] locAdjs;
 float[] locAngs;
 float[] inAngs;
+float[] ruido;
 
 int t = 0;
 
@@ -68,7 +71,7 @@ void setup() {
 	background(80);
 
 	cp5 = new ControlP5(this);
-	cf = addControlFrame("parameters", 450, 320);
+	cf = addControlFrame("parameters", 450, 380);
 	// cf = addControlFrame("parameters", 300, 420);
 
 	setupSystem();
@@ -90,23 +93,29 @@ void draw() {
 	translate(width/2, height/2);
 
 	scale(s);
+	setRuido();
 
-	// flock.showCM();
+	if(shCM == 1) flock.showCM();
 	calcPsi(flock);
 	
 	// pred.Show_Pred();
 
 	drawPartsAndVels();
-	ShowPerts();
+	// ShowPerts();
+	ShowPerts(partPert);
 
-	// if(turnPred == 1) turn(t);
 	// if(movePred == 1) perturbation();
 
 	// flock.Update(dt, go);
 	// flock.Update(dt,go, pred, beh);
-	flock.Update(dt,go,locAdjs,locAngs,inAngs);
-	// flock.Update(dt,go,locAdjs,locAngs,inAngs, pred, beh);
-
+	// 
+	if (movePred == 0) {
+		flock.Update(dt,go,locAdjs,locAngs,inAngs,ruido);
+	}else{
+		if(turnPred == 1) turnVelPert(dirRot);
+		// flock.Update(dt,go,locAdjs,locAngs,inAngs,ruido,velPert);
+		flock.Update(dt,go,locAdjs,locAngs,inAngs,ruido,velPert, partPert);
+	}
 
 	t ++;
 }
