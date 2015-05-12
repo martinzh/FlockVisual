@@ -219,10 +219,42 @@ public class ControlFrame extends PApplet {
 
     cp5.addSlider("speed")
       .plugTo(parent,"speed")
-      .setRange(0.0,2.0)
+      .setRange(0.0,10.0)
       .setValue(0.0)
       .setPosition(20,320)
       .setSize(120,20)
+      .updateSize()
+    ;
+
+    cp5.addToggle("drwCPY")
+      .plugTo(parent,"drwCPY")
+      .setValue(1)
+      .setPosition(180,320)
+      .setSize(30,30)
+      .updateSize()
+    ;
+
+    cp5.addToggle("drwDIF")
+      .plugTo(parent,"drwDIF")
+      .setValue(0)
+      .setPosition(230,320)
+      .setSize(30,30)
+      .updateSize()
+    ;
+
+    cp5.addToggle("fullCPY")
+      .plugTo(parent,"fullCPY")
+      .setValue(1)
+      .setPosition(270,320)
+      .setSize(30,30)
+      .updateSize()
+    ;
+
+    cp5.addToggle("fluctCPY")
+      .plugTo(parent,"fluctCPY")
+      .setValue(0)
+      .setPosition(310,320)
+      .setSize(30,30)
       .updateSize()
     ;
 
@@ -271,12 +303,22 @@ public class ControlFrame extends PApplet {
 
       float vX = map(flock.velCM.x, 0.0, 1.0, 5, 50 );
       float vY = map(flock.velCM.y, 0.0, 1.0, 5, 50 );
+      
+      float vXcpy = map(flockCPY.velCM.x, 0.0, 1.0, 5, 50 );
+      float vYcpy = map(flockCPY.velCM.y, 0.0, 1.0, 5, 50 );
 
       stroke(255,0,0);
       
       strokeWeight(2.5);
 
       line(0,0,vX,vY);
+
+      stroke(0,255,0);
+      
+      strokeWeight(2.5);
+
+      line(0,0,vXcpy,vYcpy);
+
       popMatrix();
 
       strokeWeight(1);

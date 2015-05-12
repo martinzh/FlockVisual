@@ -13,21 +13,6 @@ class Agent2D
     PVector pos, vel;
     int[] links;
     float r;
-    int id;
-
-/// ====================================== /// ====================================== ///
-
-    Agent2D(float l, float v, int k, float r, int id)
-    {
-        this.pos = new PVector(random(-l, l), random(-l, l));
-        this.vel = new PVector().random2D();
-
-        this.vel.mult(v);
-
-        links = new int[k];
-        this.r = r;
-        this.id = id;
-    }
 
 /// ====================================== /// ====================================== ///
 
@@ -35,12 +20,28 @@ class Agent2D
     {
         this.pos = new PVector(random(-l, l), random(-l, l));
         this.vel = new PVector().random2D();
-        
+
         this.vel.mult(v);
 
         links = new int[k];
         this.r = r;
-        this.id = 0;
+    }
+
+/// ====================================== /// ====================================== ///
+
+    Agent2D(Agent2D part)
+    {
+        this.pos = new PVector(part.pos.x, part.pos.y);
+        this.vel = new PVector(part.vel.x, part.vel.y);
+        
+        this.r = part.r;
+        this.links = new int[part.links.length];
+
+        arrayCopy(part.links, this.links);
+        // for (int i = 0; i < this.links.length; ++i) {
+        //     this.links[i] = part.links[i];
+        // }
+
     }
 
 /// ====================================== /// ====================================== ///
@@ -97,6 +98,19 @@ class Agent2D
     }
 
     void ShowPoint(PVector posCM, float col){
+
+        strokeWeight(1);
+        colorMode(HSB);
+        stroke(col,255,255,100);
+        // point(pos.x,pos.y);
+        float x = this.pos.x - posCM.x;
+        float y = this.pos.y - posCM.y;
+
+        arrow(x, y, x + arr*this.vel.x, y + arr*this.vel.y);
+        colorMode(RGB);
+    }
+
+    void ShowPertPoint(PVector posCM, float col){
 
         strokeWeight(1);
         colorMode(HSB);
@@ -240,148 +254,6 @@ class Agent2D
     void ShowRadius(){
         stroke(0,255,0);
         ellipse(pos.x, pos.y, r, r);
-    }
-
-/// ====================================== /// ====================================== ///
-
-    public void AlignTopo(Agent2D[] elements){ // con respecto a su vecindad topologica
-
-        // se inicializa como la vel propia para considerarla en el prom    
-        // PVector prom = new PVector(vel.x, vel.y);
-        PVector prom = new PVector();
-
-        float n = (float)links.length;
-
-        if (n != 0 ) {
-            for (int x : links) {
-                prom.add(elements[x].vel);
-            }
-            prom.mult(1/(n));
-            // prom.mult(1/(n+1));
-        }
-
-        if (vel.magSq() != 0 && prom.magSq() != 0) {
-
-            float phi = PI;
-
-            float ang = omega * ( PVector.angleBetween(vel,prom) + eta *random(-phi, phi)) ;
-            // println("ang: "+ang);
-            // println(vel);
-            vel.rotate(ang);
-        } 
-    }
-
-/// ====================================== /// ====================================== ///
-
-    public void AlignGeom(Agent2D[] elements){ // con respecto a su vecindad topologica
-
-        // se inicializa como la vel propia para considerarla en el prom    
-        PVector prom = new PVector(vel.x, vel.y);
-
-        float n = 1;
-
-        for (Agent2D o : elements) {
-
-            float d = pos.dist(o.pos);
-
-            if ( d > 0 && d <= r ) {
-                   // println( "r: "+ r + "\td: "+ d);
-                   prom.add(o.vel);
-                   n += 1;
-            }
-        }
-
-        prom.mult(1/(n));
-
-        if (vel.magSq() != 0 && prom.magSq() != 0 ) {
-
-            float phi = PI;
-
-            float ang = (1-omega) * ( PVector.angleBetween(vel,prom) + eta * random(-phi, phi)) ;
-            // println("ang: "+ang);
-            // println(vel);
-            vel.rotate(ang);
-        } 
-    }
-
-/// ====================================== /// ====================================== ///
-
-    public void AlignBoth(Agent2D[] elements){ // con respecto a su vecindad topologica
-
-        // se inicializa como la vel propia para considerarla en el prom    
-        // PVector prom = new PVector(vel.x, vel.y);
-        PVector prom_topo = new PVector();
-
-        float n_t = (float)links.length;
-
-        if (n_t != 0 ) {
-            for (int x : this.links) {
-                prom_topo.add(elements[x].vel);
-            }
-            prom_topo.div(n_t);
-        }
-
-    //=============================================================================
-
-        // se inicializa como la vel propia para considerarla en el prom    
-        PVector prom_geom = new PVector(vel.x, vel.y);
-
-        float n_g = 1;
-        float ang_top = 0;
-        float ang_geom = 0;
-
-        for (Agent2D o : elements) {
-
-            float d = pos.dist(o.pos);
-
-            if ( d > 0 && d <= r ) {
-                   // println( "r: "+ r + "\td: "+ d);
-                   prom_geom.add(o.vel);
-                   n_g += 1;
-            }
-        }
-
-        // if (n_g != 0) prom_geom.mult(1/(n_g+1));
-        prom_geom.div(n_g);
-
-    //=============================================================================
-
-        float phi = PI;
-
-        if (vel.magSq() != 0 && prom_topo.magSq() != 0) {
-
-
-            ang_top =  calc_ang(vel,prom_topo) ;
-            // println(vel);
-            // vel.rotate(ang);
-        } 
-
-        if (vel.magSq() != 0 && prom_geom.magSq() != 0 ) {
-            ang_geom = calc_ang(vel,prom_geom) ;
-            // println(vel);
-            // vel.rotate(ang);
-        } 
-
-        float ang = omega * ang_top + (1-omega) * ang_geom + eta*random(-phi,phi);
-
-        // println("ang_top: "+ ang_top + "\tang_geom: "+ ang_geom + "\tang: "+ ang);
-
-        vel.rotate(ang);
-
-    }
-
-/// ====================================== /// ====================================== ///
-
-    void Predator( Agent2D pred, float dt, float beh){
-
-        float sc = 1.0;
-        float ang;
-        
-        if (pos.dist(pred.pos) <= sc*r ) {
-            ang = calc_ang(vel,pred.vel) ;
-            vel.rotate(beh*ang);
-            // Move(2*dt);
-        }
     }
 
 /// ====================================== /// ====================================== ///

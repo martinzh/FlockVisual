@@ -31,6 +31,8 @@ ControlFrame cf;
 /// ====================================== /// ====================================== ///
 
 Flock flock;
+Flock flockCPY;
+int colorCPY = 10;
 
 Agent2D pred;
 PVector velPert;
@@ -45,18 +47,15 @@ float r; // radio de interaccion local
 float dt = 1.0;
 float omega; // peso relativo entre vecindades 
 float pertMag;
-int k = 2, n, go, topo, geom, bac, fluct, 
-		full, pert, numPerts, movePert, movePred, 
+int k = 2, n, go, topo, geom, bac, fluct, drwCPY, fullCPY, fluctCPY,
+		full, pert, numPerts, movePert, movePred, drwDIF,
 		shCM, turnPred, dirRot, partPert = 0;
 float s = 1;
-float p = 15; // densidad 
+float p = 6.5; // densidad 
 float tam = 10; // region cuadrada inicial
 int col = 80;
 float speed, beh = 1.0;
 
-float[][] locAdjs;
-float[] locAngs;
-float[] inAngs;
 float[] ruido;
 
 int t = 0;
@@ -72,10 +71,10 @@ void setup() {
 
 	cp5 = new ControlP5(this);
 	cf = addControlFrame("parameters", 450, 380);
-	// cf = addControlFrame("parameters", 300, 420);
 
 	setupSystem();
 	// setupSystemPred();
+
 	PFont font = createFont("Courier",10);
 	textFont(font, 10);
 }
@@ -93,29 +92,37 @@ void draw() {
 	translate(width/2, height/2);
 
 	scale(s);
+
 	setRuido();
 
-	if(shCM == 1) flock.showCM();
+	if (movePred == 0) {
+		flock.Update(dt,go,ruido);
+		flockCPY.Update(dt,go,ruido);
+	}else{
+		if(turnPred == 1) turnVelPert(dirRot);
+		flock.Update(dt,go,ruido);
+		flockCPY.Update(dt,go,ruido,velPert, partPert);
+	}
+
+	if(shCM == 1) {
+		flock.showCM();
+		flockCPY.showCM(colorCPY);
+	}
+
 	calcPsi(flock);
+	calcPsi(flockCPY);
 	
 	// pred.Show_Pred();
 
-	drawPartsAndVels();
+	drawPartsAndVels(flock);
+
+	if(drwCPY == 1) drawPartsAndVels(flockCPY, colorCPY, fullCPY, fluctCPY);
+	if(drwDIF == 1) drawDiff();
+
 	// ShowPerts();
 	ShowPerts(partPert);
 
 	// if(movePred == 1) perturbation();
-
-	// flock.Update(dt, go);
-	// flock.Update(dt,go, pred, beh);
-	// 
-	if (movePred == 0) {
-		flock.Update(dt,go,locAdjs,locAngs,inAngs,ruido);
-	}else{
-		if(turnPred == 1) turnVelPert(dirRot);
-		// flock.Update(dt,go,locAdjs,locAngs,inAngs,ruido,velPert);
-		flock.Update(dt,go,locAdjs,locAngs,inAngs,ruido,velPert, partPert);
-	}
 
 	t ++;
 }
