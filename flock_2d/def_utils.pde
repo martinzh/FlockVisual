@@ -153,19 +153,19 @@ void drawPartsAndVels(Flock flock){
   }
 }
 
-void drawPartsAndVels(Flock flock, int col, int full, int fluct){
+void drawPartsAndVels(Flock flockIN, int col, int full, int fluct){
     for(int i = 0; i < n; i ++){
       // ShowNetwork(i);
-      ShowNetwork(flock, i, flock.posCM);
-      ShowVels(flock, i, flock.posCM, col, full, fluct);
+      ShowNetwork(flockIN, i, flockIN.posCM);
+      ShowVels(flockIN, i, flockIN.posCM, col, full, fluct);
   }
 }
 
 void drawDiff(){
 
   colorMode(HSB);
-  stroke(120,200,200,80);
-  float x, xc, y, yc;
+  // stroke(120,200,200,80);
+  float x, xc, y, yc, vx,vy,vxc,vyc, val, ang;
 
   for(int i = 0; i < flock.elements.length; i ++){
 
@@ -175,6 +175,9 @@ void drawDiff(){
     xc = flockCPY.elements[i].pos.x - flockCPY.posCM.x;
     yc = flockCPY.elements[i].pos.y - flockCPY.posCM.y;
 
+    val = map(calc_ang(flock.elements[i].vel,flockCPY.elements[i].vel), -PI, PI, 0, 255);
+
+    stroke(val,255,255,120);
     arrow(x,y,xc,yc);
   }
 }
@@ -197,6 +200,8 @@ void setRuido(){
 /// ====================================== /// ====================================== ///
 
 void reset(){
+
+  go = 0;
 
   float l = tam*r;
 
@@ -227,6 +232,8 @@ void reset(){
 
   flock.calcCM();
   flockCPY.calcCM();
+
+  go = 1;
 
 }
 

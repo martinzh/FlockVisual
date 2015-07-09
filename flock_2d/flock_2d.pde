@@ -47,11 +47,11 @@ float r; // radio de interaccion local
 float dt = 1.0;
 float omega; // peso relativo entre vecindades 
 float pertMag;
-int k = 2, n, go, topo, geom, bac, fluct, drwCPY, fullCPY, fluctCPY,
+int k = 1, n, go, topo, geom, bac, fluct, drwCPY, fullCPY, fluctCPY,
 		full, pert, numPerts, movePert, movePred, drwDIF,
 		shCM, turnPred, dirRot, partPert = 0;
 float s = 1;
-float p = 6.5; // densidad 
+float p = 10; // densidad 
 float tam = 10; // region cuadrada inicial
 int col = 80;
 float speed, beh = 1.0;
@@ -64,13 +64,13 @@ int t = 0;
 
 void setup() {
 
-	size(800, 800);
+	size(400, 400);
 	smooth();
 
 	background(80);
 
 	cp5 = new ControlP5(this);
-	cf = addControlFrame("parameters", 450, 380);
+	cf = addControlFrame("parameters", 450, 420);
 
 	setupSystem();
 	// setupSystemPred();
